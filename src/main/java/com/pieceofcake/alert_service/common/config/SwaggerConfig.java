@@ -29,14 +29,14 @@ public class SwaggerConfig {
         return new OpenAPI()
                 .addSecurityItem(securityRequirement)
                 .components(components)
-                .addServersItem(new Server().url("/product-read-service"))
+                .addServersItem(new Server().url("/alert-service"))
                 .info(apiInfo());
     }
 
     private Info apiInfo() {
         return new Info()
-                .title("Product Read Service API DOCS")
-                .description("product-read-service API 테스트를 위한 Swagger UI")
+                .title("Alert Service API DOCS")
+                .description("alert-service API 테스트를 위한 Swagger UI")
                 .version("1.0.0");
     }
 
