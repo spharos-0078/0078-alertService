@@ -8,7 +8,7 @@ spring:
   application:
     name: alert-service
   profiles:
-    active: local
+    active: dev
 
 springdoc:
   api-docs:
