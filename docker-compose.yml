@@ -1,0 +1,16 @@
+version: "3.8"
+
+services:
+  alert-service:
+    container_name: alert-service
+    image: ${DOCKER_USERNAME}/alert-service:latest
+    ports:
+      - "8300:8300"
+    env_file:
+      - .env
+    networks:
+      - backend
+
+networks:
+  backend:
+    external: true
