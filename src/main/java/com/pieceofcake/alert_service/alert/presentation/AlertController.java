@@ -25,7 +25,7 @@ public class AlertController {
             description = "SSE를 통해 실시간 알림 스트림을 제공합니다. \n\n" +
                     "- memberUuid가 제공되지 않으면 공용 알림만 스트리밍하고, \n\n" +
                     "- memberUuid가 제공되면 해당 사용자의 개인 알림과 공용 알림을 모두 스트리밍합니다.\n\n" +
-                    "- AlertType = [펀딩 시작, 펀딩 참여 성공, 펀딩 종료, 조각 판매 성공, 조각 구매 성공, 투표 종료, 상위입찰 성공, 펀딩 조각 개수 변경, 조각 가격 변경, 상품 상태 변경, 경매 종료]"
+                    "- AlertType = [FUNDING_START, FUNDING_END, FUNDING_COUNT_CHANGE, PIECE_SELL_SUCCESS, PIECE_BUY_SUCCESS, PIECE_PRICE_CHANGE, VOTE_END, AUCTION_SUCCESS, AUCTION_END]"
     )
     @GetMapping(value = "/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<ServerSentEvent<AlertResponseVo>> streamAlerts(

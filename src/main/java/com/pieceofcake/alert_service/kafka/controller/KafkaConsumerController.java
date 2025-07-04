@@ -15,23 +15,17 @@ public class KafkaConsumerController {
 
     private final AlertServiceImpl alertService;
 
-//    @KafkaListener(topics = "auction-start", groupId = "auction-start-group")
-//    public void auctionStartEvent(KafkaAlertEvent kafkaAlertEvent) {
-//        log.info("Received product Create event: {}", kafkaAlertEvent);
-//        alertService.getAlert(kafkaAlertEvent);
-//    }
-
-    @KafkaListener(topics = "test-topic", groupId = "funding-start-group", containerFactory = "stringEventListener")
+    @KafkaListener(topics = "start-funding-alarm", groupId = "funding-start-group", containerFactory = "stringEventListener")
     public void fundingStart(AlertKafkaEvent alertKafkaEvent) {
         log.info("Received funding start event: {}", alertKafkaEvent);
         alertService.getAlert(alertKafkaEvent, AlertType.FUNDING_START);
     }
 
-    @KafkaListener(topics = "success-funding-participant-alarm", groupId = "funding-success-group", containerFactory = "stringEventListener")
-    public void fundingSuccess(AlertKafkaEvent alertKafkaEvent) {
-        log.info("Received funding success event: {}", alertKafkaEvent);
-        alertService.getAlert(alertKafkaEvent, AlertType.FUNDING_SUCCESS);
-    }
+//    @KafkaListener(topics = "success-funding-participant-alarm", groupId = "funding-success-group", containerFactory = "stringEventListener")
+//    public void fundingSuccess(AlertKafkaEvent alertKafkaEvent) {
+//        log.info("Received funding success event: {}", alertKafkaEvent);
+//        alertService.getAlert(alertKafkaEvent, AlertType.FUNDING_SUCCESS);
+//    }
 
     @KafkaListener(topics = "end-funding-alarm", groupId = "funding-end-group", containerFactory = "stringEventListener")
     public void fundingEnd(AlertKafkaEvent alertKafkaEvent) {
