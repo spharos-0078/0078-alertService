@@ -10,9 +10,8 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class AlertKafkaEvent {
-    private String Key;
+    private String key;
     private String message;
-    private AlertType alertType;
     private String memberUuid;
     private Boolean commonAlert = true;
 
@@ -20,12 +19,10 @@ public class AlertKafkaEvent {
     public AlertKafkaEvent(
             String key,
             String message,
-            AlertType alertType,
             String memberUuid,
             boolean commonAlert) {
-        this.Key = key;
+        this.key = key;
         this.message = message;
-        this.alertType = alertType;
         this.memberUuid = memberUuid;
         this.commonAlert = commonAlert;
     }

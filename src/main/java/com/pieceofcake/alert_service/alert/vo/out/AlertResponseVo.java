@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AlertResponseVo {
 
-    private String Key;
+    private String key;
     private String message;
     private AlertType alertType;
 
@@ -19,7 +19,7 @@ public class AlertResponseVo {
             String message,
             AlertType alertType
     ) {
-        this.Key = key;
+        this.key = key;
         this.message = message;
         this.alertType = alertType;
     }
