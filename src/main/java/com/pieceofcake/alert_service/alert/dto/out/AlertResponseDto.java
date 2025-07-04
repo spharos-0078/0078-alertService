@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 public class AlertResponseDto {
-    private String Key;
+    private String key;
     private String message;
     private AlertType alertType;
     private String memberUuid;
@@ -26,7 +26,7 @@ public class AlertResponseDto {
             String memberUuid,
             Boolean commonAlert
     ) {
-        this.Key = key;
+        this.key = key;
         this.message = message;
         this.alertType = alertType;
         this.memberUuid = memberUuid;
@@ -51,7 +51,7 @@ public class AlertResponseDto {
 
     public AlertResponseVo toVo() {
         return AlertResponseVo.builder()
-                .key(Key)
+                .key(key)
                 .message(message)
                 .alertType(alertType)
                 .build();
