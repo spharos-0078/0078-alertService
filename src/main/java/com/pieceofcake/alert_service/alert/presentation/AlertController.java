@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 
+import java.time.Duration;
+
 @RestController
 @RequestMapping("/api/v1/alert")
 @RequiredArgsConstructor
@@ -45,10 +47,30 @@ public class AlertController {
             alertStream = alertService.getCommonAlertStream();
         }
 
-        return alertStream
+        // 1) 연결 직후 “init” 이벤트 한 번 보내서 프록시 버퍼 플러시
+        Flux<ServerSentEvent<AlertResponseVo>> init = Flux.just(
+                ServerSentEvent.<AlertResponseVo>builder()
+                        .comment("connected")
+                        .build()
+        );
+
+        // 2) 15초마다 빈 헬스체크(keep-alive) 주석 이벤트
+        Flux<ServerSentEvent<AlertResponseVo>> heartbeat = Flux
+                .interval(Duration.ofSeconds(15))
+                .map(tick -> ServerSentEvent.<AlertResponseVo>builder()
+                        .comment("ping")
+                        .build()
+                );
+
+        // 3) 실제 알림을 SSE로 포장
+        Flux<ServerSentEvent<AlertResponseVo>> alerts = alertStream
                 .map(alertVo -> ServerSentEvent.<AlertResponseVo>builder()
                         .event("alert")
                         .data(alertVo)
-                        .build());
+                        .build()
+                );
+
+        return init.concatWith(alerts.mergeWith(heartbeat));
+
     }
 }
