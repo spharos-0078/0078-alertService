@@ -54,13 +54,13 @@ public class AlertController {
                         .build()
         );
 
-//        // 2) 15초마다 빈 헬스체크(keep-alive) 주석 이벤트
-//        Flux<ServerSentEvent<AlertResponseVo>> heartbeat = Flux
-//                .interval(Duration.ofSeconds(15))
-//                .map(tick -> ServerSentEvent.<AlertResponseVo>builder()
-//                        .comment("ping")
-//                        .build()
-//                );
+        // 2) 15초마다 빈 헬스체크(keep-alive) 주석 이벤트
+        Flux<ServerSentEvent<AlertResponseVo>> heartbeat = Flux
+                .interval(Duration.ofSeconds(15))
+                .map(tick -> ServerSentEvent.<AlertResponseVo>builder()
+                        .comment("ping")
+                        .build()
+                );
 
         // 3) 실제 알림을 SSE로 포장
         Flux<ServerSentEvent<AlertResponseVo>> alerts = alertStream
@@ -70,8 +70,8 @@ public class AlertController {
                         .build()
                 );
 
-//        return init.concatWith(alerts.mergeWith(heartbeat));
-        return init.concatWith(alerts);
+        return init.concatWith(alerts.mergeWith(heartbeat));
+//        return init.concatWith(alerts);
 
     }
 }
