@@ -41,6 +41,9 @@ jobs:
           
           echo "EC2_HOST=${{ secrets.EC2_HOST }}" >> .env
           echo "EC2_HOST2=${{ secrets.EC2_HOST2 }}" >> .env
+          
+          echo "EC2_MONGOID=${{ secrets.EC2_MONGOID }}" >> .env
+          echo "EC2_MONGOPW=${{ secrets.EC2_MONGOPW }}" >> .env
 
 
       - name: Build and Push Docker Image to Docker Hub
