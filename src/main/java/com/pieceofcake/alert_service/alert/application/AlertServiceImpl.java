@@ -5,7 +5,6 @@ import com.pieceofcake.alert_service.alert.dto.out.AlertResponseDto;
 import com.pieceofcake.alert_service.alert.entity.Alert;
 import com.pieceofcake.alert_service.alert.entity.enums.AlertType;
 import com.pieceofcake.alert_service.alert.infrastructure.AlertMongoRepository;
-import com.pieceofcake.alert_service.alert.vo.out.AlertResponseVo;
 import com.pieceofcake.alert_service.kafka.event.AlertKafkaEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,12 +17,6 @@ import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Sinks;
-import reactor.core.Scannable;
-
-import java.io.IOException;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicReference;
 
 @Slf4j
 @Service
@@ -36,9 +29,8 @@ public class AlertServiceImpl implements AlertService {
 
     @Override
     public void getAlert(AlertKafkaEvent alertKafkaEvent, AlertType alertType) {
-        log.info("@@@@@@@123");
+        log.info("Received alert event: {}", alertKafkaEvent);
         mongoTemplate.save(alertKafkaEvent.toEntity(alertType));
-        log.info("@@@@@@@");
     }
 
     @Override
@@ -78,29 +70,6 @@ public class AlertServiceImpl implements AlertService {
                         .alertType(AlertType.valueOf(document.getString("alertType")))
                         .build());
 
-//        if (memberUuid == null || memberUuid.isBlank()) {
-//            // 공용 알람만 조회
-//            return alertMongoRepository.findByCommonAlertTrue().map(alert ->
-//                    AlertResponseDto.builder()
-//                            .key(alert.getKey())
-//                            .message(alert.getMessage())
-//                            .memberUuid(alert.getMemberUuid())
-//                            .alertType(alert.getAlertType())
-//                            .build()
-//            );
-//        } else {
-//            // 개인 알림 + 공용 알림 둘 다 merge
-//            Flux<Alert> personalAlerts = alertMongoRepository.findByMemberUuid(memberUuid);
-//            Flux<Alert> commonAlerts = alertMongoRepository.findByCommonAlertTrue();
-//        return Flux.merge(personalAlerts, commonAlerts).map(alert ->
-//                AlertResponseDto.builder()
-//                        .key(alert.getKey())
-//                        .message(alert.getMessage())
-//                        .memberUuid(alert.getMemberUuid())
-//                        .alertType(alert.getAlertType())
-//                        .build()
-//                );
-//        }
     }
 
 }
