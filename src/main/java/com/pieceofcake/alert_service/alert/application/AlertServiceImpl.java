@@ -35,6 +35,7 @@ public class AlertServiceImpl implements AlertService {
 
     @Override
     public Flux<AlertResponseDto> getAlertByMemberUuid(String memberUuid) {
+        log.debug("getAlertByMemberUuid 호출됨. memberUuid: {}", memberUuid);
 
         ChangeStreamOptions options;
 
@@ -42,12 +43,16 @@ public class AlertServiceImpl implements AlertService {
 
 
         if (memberUuid == null || memberUuid.isBlank()) {
+            log.debug("memberUuid가 없으므로 공용 알림(commonAlert=true)만 필터링합니다.");
+
             options = ChangeStreamOptions.builder()
                     .filter(Aggregation.newAggregation(
                             Aggregation.match(Criteria.where("operationType").is(OperationType.INSERT.getValue())),
                             Aggregation.match(Criteria.where("fullDocument.commonAlert").is(true))
                     )).build();
         } else {
+            log.debug("memberUuid가 있으므로 공용 알림과 개인 알림을 필터링합니다. memberUuid: {}", memberUuid);
+
             options = ChangeStreamOptions.builder()
                     .filter(Aggregation.newAggregation(
                             Aggregation.match(Criteria.where("operationType").is(OperationType.INSERT.getValue())),
@@ -60,15 +65,25 @@ public class AlertServiceImpl implements AlertService {
                             )
                     )).build();
         }
+        log.debug("ChangeStreamOptions 설정 완료. 컬렉션: alert_message_entity");
 
         return reactiveMongoTemplate.changeStream("alert_message_entity", options, Document.class)
+                .doOnSubscribe(subscription -> log.debug("ChangeStream 구독 시작"))
+                .doOnNext(event -> log.debug("ChangeStream 이벤트 수신: {}", event))
                 .map(ChangeStreamEvent::getBody)
-                .map(document -> AlertResponseDto.builder()
-                        .key(document.getString("key"))
-                        .message(document.getString("message"))
-                        .memberUuid(document.getString("memberUuid"))
-                        .alertType(AlertType.valueOf(document.getString("alertType")))
-                        .build());
+                .map(document -> {
+                    log.debug("ChangeStream 문서 변환 시작: {}", document);
+                    AlertResponseDto responseDto = AlertResponseDto.builder()
+                            .key(document.getString("key"))
+                            .message(document.getString("message"))
+                            .memberUuid(document.getString("memberUuid"))
+                            .alertType(AlertType.valueOf(document.getString("alertType")))
+                            .build();
+                    log.debug("AlertResponseDto 생성 완료: {}", responseDto);
+                    return responseDto;
+                })
+                .doOnError(error -> log.error("ChangeStream 처리 중 오류 발생", error))
+                .doOnComplete(() -> log.debug("ChangeStream 처리 완료"));
 
     }
 
