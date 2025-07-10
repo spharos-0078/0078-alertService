@@ -80,4 +80,10 @@ public class KafkaConsumerController {
         log.info("Received auction end event: {}", alertKafkaEvent);
         alertService.getAlert(alertKafkaEvent, AlertType.AUCTION_END);
     }
+
+    @KafkaListener(topics = "reply-comment-alarm", groupId = "reply-comment-group", containerFactory = "stringEventListener")
+    public void replyComment(AlertKafkaEvent alertKafkaEvent) {
+        log.info("Received reply comment event: {}", alertKafkaEvent);
+        alertService.getAlert(alertKafkaEvent, AlertType.REPLY_COMMENT);
+    }
 }

@@ -35,8 +35,9 @@ public class AlertController {
                     "- **PIECE_SELL_SUCCESS**: 조각 판매 성공\n" +
                     "- **PIECE_BUY_SUCCESS**: 조각 구매 성공\n" +
                     "- **VOTE_END**: 투표 종료\n" +
-                    "- **AUCTION_SUCCESS**: 경매 구매 성공\n\n\n" +
-                    "각 key에는, 서비스의 종류에 따라 productUuid, fundingUuid, pieceProductUuid, voteUuid, auctionUuid 값이 전달됩니다. "
+                    "- **AUCTION_SUCCESS**: 경매 구매 성공\n" +
+                    "- **REPLY_COMMENT**: 대댓글 생성\n\n\n" +
+                    "각 key에는, 서비스의 종류에 따라 productUuid, fundingUuid, pieceProductUuid, voteUuid, auctionUuid, parentReplyUuid 값이 전달됩니다. "
     )
     @GetMapping(value = "/stream/new", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<AlertResponseDto> getAlertByMemberUuid(
