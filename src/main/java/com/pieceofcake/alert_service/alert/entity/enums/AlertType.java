@@ -16,6 +16,7 @@ public enum AlertType {
     PIECE_BUY_SUCCESS("조각 구매 성공"),
     VOTE_END("투표 종료"),
     AUCTION_SUCCESS("경매 구매 성공"),
+    REPLY_COMMENT("대댓글 생성"),
 
     // 프론트용 알람
     FUNDING_COUNT_CHANGE("공모 조각 개수 변경"),
